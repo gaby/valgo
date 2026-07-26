@@ -53,7 +53,73 @@ if err := val.ToError(); err != nil {
 }
 ```
 
-## When to use Is vs Check
+## Extended example
+
+This larger example composes validation without struct tags. It shows
+alternative rules, optional values, validation that depends on earlier
+results, and nested error paths in one flow.
+
+```go
+type Address struct {
+  Line1      string
+  City       string
+  Country    string
+  PostalCode string
+}
+
+type Registration struct {
+  Name                 string
+  Email                string
+  Password             string
+  PasswordConfirmation string
+  ContactPreference    string
+  ReferralCode         string
+  Address              Address
+}
+
+func validateRegistration(input Registration) *v.Validation {
+  return v.Is(
+    v.String(input.Name, "name").Not().Blank().LengthBetween(2, 80),
+    v.String(input.Email, "email").Not().Blank(),
+    v.String(input.Password, "password").Not().Blank().LengthBetween(10, 64),
+    v.String(input.ContactPreference, "contact_preference").
+      EqualTo("email").Or().EqualTo("sms"),
+    v.String(input.ReferralCode, "referral_code").
+      Empty().OrElse().MatchingTo(regexp.MustCompile(`^[A-Z0-9]{6,12}$`)),
+  ).IfPathValid(
+    "password",
+    v.Is(v.String(input.PasswordConfirmation, "password_confirmation").
+      EqualTo(input.Password)),
+  ).In("address",
+    v.Is(
+      v.String(input.Address.Line1, "line1").Not().Blank(),
+      v.String(input.Address.City, "city").Not().Blank(),
+      v.String(input.Address.Country, "country").Not().Blank().EqualTo("US"),
+      v.String(input.Address.PostalCode, "postal_code").Not().Blank(),
+    ).WhenAllValid([]string{"country", "postal_code"}, func(val *v.Validation) {
+      if err := verifyPostalCode("US", input.Address.PostalCode); err != nil {
+        val.AddErrorMessage("postal_code", "Postal code could not be verified")
+      }
+    }),
+  )
+}
+```
+
+The example assumes that the application provides `verifyPostalCode`.
+
+- `Or()` accepts `email` or `sms` as the contact preference.
+- `OrElse()` accepts an empty referral code without evaluating the regex.
+- `IfPathValid()` merges the password-confirmation validation only after the
+  password passes.
+- `In("address", ...)` prefixes nested errors with `address`.
+- `WhenAllValid()` calls postal-code verification only after the initial
+  country and postal-code rules pass.
+
+See [OR operators](/validators/or-operators/),
+[conditional validation](/using-valgo/conditional-flows/), and
+[namespaces](/using-valgo/namespaces/) for the detailed behavior.
+
+## When to use `Is` vs `Check`
 
 - `Is(...)`: stops a validator chain after its first failed rule.
 - `Check(...)`: continues evaluating rules after failures so it can collect
@@ -68,7 +134,7 @@ val := v.Check(
 _ = val.Valid() // false, with 2 messages for full_name
 ```
 
-## Nested models
+## Nested models and collections
 
 Use namespaces to build structured paths:
 
@@ -76,4 +142,5 @@ Use namespaces to build structured paths:
 - `InRow("list", i, ...)` for slices of structs
 - `InCell("list", i, ...)` for slices of scalar values
 
-See `Using Valgo -> Namespaces`.
+See [Namespaces](/using-valgo/namespaces/) and
+[Slices and indexed errors](/cookbook/slices/) for complete examples.

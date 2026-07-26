@@ -1,4 +1,4 @@
-# Valgo
+# Valgo: Type-Safe Validation for Go
 
 Valgo is a type-safe, expressive, and extensible validation library for Go with built-in i18n support.
 
@@ -6,7 +6,9 @@ Unlike validation libraries that rely on struct tags, Valgo defines validation r
 
 Valgo can be customized to fit your application's needs, from overriding validation messages to localizing them for different languages and contexts.
 
-## Quick example
+**Valgo is pre-v1.0, so breaking changes can happen.**
+
+## Quick Minimal Example
 
 ```go
 package main
@@ -43,6 +45,69 @@ Output:
   ]
 }
 ```
+
+## Extended Example
+
+This account registration example shows how validation rules can be composed
+without struct tags, including nested structs and validation that depends on
+earlier results.
+
+```go
+type Address struct {
+  Line1      string
+  City       string
+  Country    string
+  PostalCode string
+}
+
+type Registration struct {
+  Name                 string
+  Email                string
+  Password             string
+  PasswordConfirmation string
+  ContactPreference    string
+  ReferralCode         string
+  Address              Address
+}
+
+func validateRegistration(input Registration) *v.Validation {
+
+  return v.Is(
+    v.String(input.Name, "name").Not().Blank().LengthBetween(2, 80),
+    v.String(input.Email, "email").Not().Blank(),
+    v.String(input.Password, "password").Not().Blank().LengthBetween(10, 64),
+    v.String(input.ContactPreference, "contact_preference").
+      EqualTo("email").Or().EqualTo("sms"),
+    v.String(input.ReferralCode, "referral_code").
+      Empty().OrElse().MatchingTo(regexp.MustCompile(`^[A-Z0-9]{6,12}$`)),
+  ).IfPathValid(
+    "password",
+    v.Is(v.String(input.PasswordConfirmation, "password_confirmation").
+      EqualTo(input.Password)),
+  ).In("address",
+    v.Is(
+      v.String(input.Address.Line1, "line1").Not().Blank(),
+      v.String(input.Address.City, "city").Not().Blank(),
+      v.String(input.Address.Country, "country").Not().Blank().EqualTo("US"),
+      v.String(input.Address.PostalCode, "postal_code").Not().Blank(),
+    ).WhenAllValid([]string{"country", "postal_code"}, func(val *v.Validation) {
+      if err := verifyPostalCode("US", input.Address.PostalCode); err != nil {
+        val.AddErrorMessage("postal_code", "Postal code could not be verified")
+      }
+    }),
+  )
+}
+```
+
+* Here, `Or()` accepts either supported contact preference, while `OrElse()`
+short-circuits the referral-code pattern check when the optional code is empty.
+* `IfPathValid()` merges the password-confirmation result only when the password
+itself passes.
+* The address rules are grouped with `In()`, so their errors use
+paths such as `address.city` and `address.postal_code`. Within that nested
+validation, `WhenAllValid()` calls the application's `verifyPostalCode`
+function only after both the country and postal code pass their initial rules.
+* The excerpt assumes that `verifyPostalCode` is provided by the application.
 
 ## Website and documentation
 

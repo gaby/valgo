@@ -81,12 +81,68 @@ import { docsSidebar } from '../../data/sidebar.mjs';
     ]
 }
 `} />
+
   <div class="w-full !mt-[4rem]">
+    <div class="title w-full">Extended example</div>
+    <p class="text-textGrayDark">
+      Compose ordinary Go functions into a complete registration flow with
+      alternatives, dependent rules, and nested validation paths.
+    </p>
+    <Code
+      lang="go"
+      class="code-block-secondary"
+      code={`
+  type Address struct {
+    Line1      string
+    City       string
+    Country    string
+    PostalCode string
+  }
+
+  type Registration struct {
+    Name                 string
+    Email                string
+    Password             string
+    PasswordConfirmation string
+    ContactPreference    string
+    ReferralCode         string
+    Address              Address
+  }
+
+  func validateRegistration(input Registration) *v.Validation {
+    return v.Is(
+      v.String(input.Name, "name").Not().Blank().LengthBetween(2, 80),
+      v.String(input.Email, "email").Not().Blank(),
+      v.String(input.Password, "password").Not().Blank().LengthBetween(10, 64),
+      v.String(input.ContactPreference, "contact_preference").
+        EqualTo("email").Or().EqualTo("sms"),
+      v.String(input.ReferralCode, "referral_code").
+        Empty().OrElse().MatchingTo(regexp.MustCompile(\`^[A-Z0-9]{6,12}$\`)),
+    ).IfPathValid("password",
+      v.Is(v.String(input.PasswordConfirmation, "password_confirmation").
+        EqualTo(input.Password)),
+    ).In("address",
+      v.Is(
+        v.String(input.Address.Line1, "line1").Not().Blank(),
+        v.String(input.Address.City, "city").Not().Blank(),
+        v.String(input.Address.Country, "country").Not().Blank().EqualTo("US"),
+        v.String(input.Address.PostalCode, "postal_code").Not().Blank(),
+      ).WhenAllValid([]string{"country", "postal_code"}, func(val *v.Validation) {
+        if err := verifyPostalCode("US", input.Address.PostalCode); err != nil {
+          val.AddErrorMessage("postal_code", "Postal code could not be verified")
+        }
+      }),
+    )
+  }
+`} />
+  </div>
+
+  <div class="w-full !mt-[1rem]">
     <div class="title w-full">Installing</div>
     <pre class="code-block-secondary !mt-0">go get github.com/cohesivestack/valgo</pre>
   </div>
 
-  <div class="w-full !mt-[4rem]">
+  <div class="w-full !mt-[1rem]">
     <div class="title w-full">Agent skill</div>
     <pre class="code-block-secondary !mt-0">npx skills add cohesivestack/valgo --skill valgo</pre>
   </div>

@@ -5,29 +5,17 @@ description: Review Valgo v0 migration notes, breaking changes, and validation b
 
 Valgo is pre-v1.0, so breaking changes can happen.
 
-## v0.6.0 - String length counts runes (characters)
+## v0.8.1 - Shorter string length validator names
 
-String length validators now measure **runes** instead of bytes:
+String length validators now have shorter preferred names:
 
-- A multi-byte UTF-8 character counts as 1.
-- Use explicit byte-length validators if you need `len(s)` semantics.
+- `ByteLength` replaces `OfByteLength`
+- `ByteLengthBetween` replaces `OfByteLengthBetween`
+- `Length` replaces `OfLength`
+- `LengthBetween` replaces `OfLengthBetween`
 
-Byte-based validators:
-
-- `MaxBytes`
-- `MinBytes`
-- `OfByteLength`
-- `OfByteLengthBetween`
-
-## v0.7.0 - Numeric validators switched to generics
-
-Numeric validators are now generic per family:
-
-- `ValidatorInt[T ~int | ~int8 | ~int16 | ~int32 | ~int64]`
-- `ValidatorUint[T ~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64]`
-- `ValidatorFloat[T ~float32 | ~float64]`
-
-Most call sites remain the same (constructors like `v.Int16(...)` still exist). You mainly need to update declared types.
+The `Of*` methods remain available as deprecated aliases in v0.8.1 for
+compatibility. They will be removed in v1.0.
 
 ## v0.8.0 - Go version and validation flow
 
@@ -46,14 +34,26 @@ Most call sites remain the same (constructors like `v.Int16(...)` still exist). 
 - Custom validators can supply missing message entries through
   `ValidatorContext.WithLocaleFallback()`.
 
-## v0.8.1 - Shorter string length validator names
+## v0.7.0 - Numeric validators switched to generics
 
-String length validators now have shorter preferred names:
+Numeric validators are now generic per family:
 
-- `ByteLength` replaces `OfByteLength`
-- `ByteLengthBetween` replaces `OfByteLengthBetween`
-- `Length` replaces `OfLength`
-- `LengthBetween` replaces `OfLengthBetween`
+- `ValidatorInt[T ~int | ~int8 | ~int16 | ~int32 | ~int64]`
+- `ValidatorUint[T ~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64]`
+- `ValidatorFloat[T ~float32 | ~float64]`
 
-The `Of*` methods remain available as deprecated aliases in v0.8.1 for
-compatibility. They will be removed in v1.0.
+Most call sites remain the same (constructors like `v.Int16(...)` still exist). You mainly need to update declared types.
+
+## v0.6.0 - String length counts runes (characters)
+
+String length validators now measure **runes** instead of bytes:
+
+- A multi-byte UTF-8 character counts as 1.
+- Use explicit byte-length validators if you need `len(s)` semantics.
+
+Byte-based validators:
+
+- `MaxBytes`
+- `MinBytes`
+- `OfByteLength`
+- `OfByteLengthBetween`
