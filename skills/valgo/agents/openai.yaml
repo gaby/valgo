@@ -1,4 +1,4 @@
 interface:
   display_name: "Valgo"
-  short_description: "Use Valgo validation patterns for Go"
-  default_prompt: "Use $valgo to add or update Valgo validations in this Go project."
+  short_description: "Build and migrate Valgo validation in Go"
+  default_prompt: "Use $valgo to add, refactor, debug, review, explain, or migrate Valgo validation in this Go project."
