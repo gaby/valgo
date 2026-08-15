@@ -11,6 +11,22 @@ func TestValidatorUintConstructor(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
+	v = Is(Uint(uint8(1)).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(Uint(uint16(1)).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(Uint(uint32(1)).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(Uint(uint64(1)).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
 	v = Is(Uint8(uint8(1)).Not().Zero())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())

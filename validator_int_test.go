@@ -7,7 +7,24 @@ import (
 )
 
 func TestValidatorIntConstructor(t *testing.T) {
+
 	v := Is(Int(1).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(Int(int8(1)).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(Int(int16(1)).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(Int(int32(1)).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(Int(int64(1)).Not().Zero())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
