@@ -6,6 +6,17 @@ by the core workflow. Do not use this reference to claim that a method exists.
 
 ## High-risk release boundaries
 
+### v0.9.0
+
+- Added `github.com/cohesivestack/valgo/is`, which exposes built-in rule logic
+  as stateless boolean predicates. Do not use it in a consumer unless it exists
+  in the effective module source.
+- Generalized `Int`/`IntP`, `Uint`/`UintP`, and `Float`/`FloatP` to accept every
+  width in their respective numeric family.
+- Deprecated width-specific signed integer, unsigned integer, and float
+  constructors. `Rune`/`RuneP` and `Byte`/`ByteP` remain supported semantic
+  constructors.
+
 ### v0.8.1
 
 - Added preferred string methods `ByteLength`, `ByteLengthBetween`, `Length`,
@@ -46,6 +57,9 @@ changes; test them during an upgrade.
 - Prefer `PathValid()` over `IsValid()` when the installed version supports it.
 - Prefer the v0.8.1 short string length names only when that version supports
   them.
+- Prefer generalized numeric constructors only when the effective version
+  supports their wider constraints. Before that boundary, keep the matching
+  width-specific constructor.
 
 Do not proactively modernize these calls in a pinned consumer project unless
 the replacement API exists there and the requested refactor permits the

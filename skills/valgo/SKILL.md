@@ -67,6 +67,8 @@ Read only the matching documentation needed for the task:
   `using-valgo/validation-sessions.md`
 - Validator selection and rules: `validators/overview.md`,
   `validators/rule-index.md`, and the relevant validator page
+- Stateless boolean rules: `validators/predicates.md` when that page and the
+  `github.com/cohesivestack/valgo/is` package exist in the effective version
 - Nested values and slices: `using-valgo/namespaces.md`
 - Result queries and conditional work:
   `using-valgo/querying-results.md` and
@@ -106,8 +108,11 @@ release. Use unversioned latest docs only under priority 4 above.
    Preserve a different established alias.
 3. Keep Valgo's function-based model. Do not introduce validation struct tags.
 4. Select the narrowest validator compatible with the Go value's exact type.
-   Use the matching pointer validator for `*T`; do not replace absence with a
-   sentinel zero value.
+   On versions with generalized numeric constructors, use `Int`/`IntP` for
+   signed integers, `Uint`/`UintP` for unsigned integers, and `Float`/`FloatP`
+   for floating-point values regardless of width. On older versions, use the
+   width-specific constructor. Do not replace pointer absence with a sentinel
+   zero value.
 5. Give validators stable machine-readable names. Use titles only when display
    text must differ from the field name.
 6. Use `In` for nested objects, `InRow` for slices of objects, and `InCell` for
@@ -127,6 +132,10 @@ release. Use unversioned latest docs only under priority 4 above.
     `*v.Validation` when the pattern genuinely repeats. Create a custom
     validator only for a reusable domain rule that benefits from its own typed
     API and message key.
+11. When the effective Valgo version includes the `is` subpackage, use its
+    stateless predicates for reusable boolean checks that do not need field
+    paths, messages, localization, or validation-session results. A predicate
+    may be passed to a validator's `Passing` method when an error is needed.
 
 ## Follow the task-specific workflow
 

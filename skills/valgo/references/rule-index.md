@@ -1,8 +1,8 @@
 # Validator selection and rule orientation
 
-Use this compact index to choose where to look. It reflects the Valgo v0.8.1
-source in the repository when this reference was written; confirm constructors
-and methods in the consumer's effective Valgo source before generating code.
+Use this compact index to choose where to look. It reflects the Valgo v0.9.0
+source when this reference was written; confirm constructors and methods in the
+consumer's effective Valgo source before generating code.
 
 ## Choose the narrowest constructor
 
@@ -10,9 +10,9 @@ and methods in the consumer's effective Valgo source before generating code.
 | --- | --- | --- | --- |
 | `string` or a defined `~string` type | `String` | `StringP` | Use rune-length rules for characters and byte-length rules for payload size. |
 | `bool` or a defined `~bool` type | `Bool` | `BoolP` | Prefer over `Comparable` or `Typed`. |
-| `int`, `int8`, `int16`, `int32`, `int64` | `Int`, `Int8`, `Int16`, `Int32`, `Int64` | Matching name plus `P` | Use `Rune`/`RuneP` when the `int32` value is semantically a rune. |
-| `uint`, `uint8`, `uint16`, `uint32`, `uint64` | `Uint`, `Uint8`, `Uint16`, `Uint32`, `Uint64` | Matching name plus `P` | Use `Byte`/`ByteP` when the `uint8` value is semantically a byte. |
-| `float32`, `float64` | `Float32`, `Float64` | `Float32P`, `Float64P` | Includes finite/NaN/infinite rules. |
+| `int`, `int8`, `int16`, `int32`, `int64` | `Int` | `IntP` | Width-specific constructors are deprecated in current source. Use `Rune`/`RuneP` when an `int32` is semantically a rune. |
+| `uint`, `uint8`, `uint16`, `uint32`, `uint64` | `Uint` | `UintP` | Width-specific constructors are deprecated in current source. Use `Byte`/`ByteP` when a `uint8` is semantically a byte. |
+| `float32`, `float64` | `Float` | `FloatP` | Width-specific constructors are deprecated in current source. Includes finite/NaN/infinite rules. |
 | A generic value spanning numeric families | `Number` | `NumberP` | Use only when the code intentionally accepts Valgo's `TypeNumber` family. |
 | `time.Time` | `Time` | `TimeP` | Uses time-specific ordering rules. |
 | Another `comparable` domain type | `Comparable` | `ComparableP` | Type-safe equality and membership; no ordering rules. |
@@ -22,6 +22,10 @@ and methods in the consumer's effective Valgo source before generating code.
 Valgo has no container validator dedicated to slices or maps in this version.
 Validate slice elements with `InRow` or `InCell`. Use a typed `Passing`
 predicate only when validating a collection as a whole is the intended rule.
+
+The generalized `Int`, `Uint`, and `Float` constructors and the `is` predicate
+subpackage start in v0.9.0. For v0.8.1 and earlier, inspect source and retain
+the matching width-specific constructor.
 
 ## Find the relevant rule family
 
