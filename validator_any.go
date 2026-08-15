@@ -106,7 +106,7 @@ func (validator *ValidatorAny) OrElse() *ValidatorAny {
 func (validator *ValidatorAny) EqualTo(value any, template ...string) *ValidatorAny {
 	validator.context.AddWithValue(
 		func() bool {
-			return is.AnyEqualTo(validator.context.Value(), value)
+			return validator.context.Value() == value
 		},
 		ErrorKeyEqualTo, value, template...)
 

@@ -23,11 +23,6 @@ func ComparablePInSlice[T comparable](value *T, values []T) bool {
 
 func ComparablePNil[T comparable](value *T) bool { return value == nil }
 
-// AnyEqualTo uses interface equality and, like Go's == operator, panics if the
-// dynamic values are not comparable. It exists for parity with Valgo's
-// deprecated Any.EqualTo rule; prefer ComparableEqualTo for new code.
-func AnyEqualTo(value, expected any) bool { return value == expected }
-
 // Passing evaluates a caller-provided validation rule.
 func Passing[T any](value T, function func(T) bool) bool { return function(value) }
 
