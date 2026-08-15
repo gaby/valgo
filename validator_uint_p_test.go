@@ -15,11 +15,19 @@ func TestValidatorUintPConstructor(t *testing.T) {
 
 	numberUint8 := uint8(1)
 
+	v = Is(UintP(&numberUint8).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
 	v = Is(Uint8P(&numberUint8).Not().Zero())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	numberUint16 := uint16(1)
+
+	v = Is(UintP(&numberUint16).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
 
 	v = Is(Uint16P(&numberUint16).Not().Zero())
 	assert.True(t, v.Valid())
@@ -27,11 +35,19 @@ func TestValidatorUintPConstructor(t *testing.T) {
 
 	numberUint32 := uint32(1)
 
+	v = Is(UintP(&numberUint32).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
 	v = Is(Uint32P(&numberUint32).Not().Zero())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	numberUint64 := uint64(1)
+
+	v = Is(UintP(&numberUint64).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
 
 	v = Is(Uint64P(&numberUint64).Not().Zero())
 	assert.True(t, v.Valid())

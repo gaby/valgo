@@ -1,5 +1,7 @@
 package valgo
 
+import "github.com/cohesivestack/valgo/is"
+
 // The Comparable validator's type that keeps its validator context.
 // T can be any Go type (pointer, struct, etc.) that is comparable.
 type ValidatorComparable[T comparable] struct {
@@ -102,7 +104,7 @@ func (validator *ValidatorComparable[T]) OrElse() *ValidatorComparable[T] {
 func (validator *ValidatorComparable[T]) EqualTo(value T, template ...string) *ValidatorComparable[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value() == value
+			return is.ComparableEqualTo(validator.context.Value().(T), value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -124,8 +126,7 @@ func (validator *ValidatorComparable[T]) EqualTo(value T, template ...string) *V
 func (validator *ValidatorComparable[T]) Passing(function func(v T) bool, template ...string) *ValidatorComparable[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			// Value is stored as interface{} inside the context; assert back to T.
-			return function(validator.context.Value().(T))
+			return is.Passing(validator.context.Value().(T), function)
 		},
 		ErrorKeyPassing, validator.context.Value(), template...)
 
@@ -141,13 +142,7 @@ func (validator *ValidatorComparable[T]) Passing(function func(v T) bool, templa
 func (validator *ValidatorComparable[T]) InSlice(slice []T, template ...string) *ValidatorComparable[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			v := validator.context.Value().(T)
-			for _, s := range slice {
-				if v == s {
-					return true
-				}
-			}
-			return false
+			return is.ComparableInSlice(validator.context.Value().(T), slice)
 		},
 		ErrorKeyInSlice, validator.context.Value(), template...)
 

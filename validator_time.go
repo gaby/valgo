@@ -2,44 +2,9 @@ package valgo
 
 import (
 	"time"
+
+	"github.com/cohesivestack/valgo/is"
 )
-
-func isTimeEqualTo(v0 time.Time, v1 time.Time) bool {
-	return v0.Equal(v1)
-}
-
-func isTimeAfter(v0 time.Time, v1 time.Time) bool {
-	return v0.After(v1)
-}
-
-func isTimeAfterOrEqualTo(v0 time.Time, v1 time.Time) bool {
-	return v0.After(v1) || v0.Equal(v1)
-}
-
-func isTimeBefore(v0 time.Time, v1 time.Time) bool {
-	return v0.Before(v1)
-}
-
-func isTimeBeforeOrEqualTo(v0 time.Time, v1 time.Time) bool {
-	return v0.Before(v1) || v0.Equal(v1)
-}
-
-func isTimeZero(v time.Time) bool {
-	return v.IsZero()
-}
-
-func isTimeBetween(v time.Time, min time.Time, max time.Time) bool {
-	return (v.After(min) || v.Equal(min)) && (v.Before(max) || v.Equal(max))
-}
-
-func isTimeInSlice(v time.Time, slice []time.Time) bool {
-	for _, _v := range slice {
-		if v.Equal(_v) {
-			return true
-		}
-	}
-	return false
-}
 
 // The `ValidatorTime` structure provides a set of methods to perform validation
 // checks on time.Time values, utilizing Go's native time package.
@@ -148,7 +113,7 @@ func (validator *ValidatorTime) OrElse() *ValidatorTime {
 func (validator *ValidatorTime) EqualTo(value time.Time, template ...string) *ValidatorTime {
 	validator.context.AddWithValue(
 		func() bool {
-			return isTimeEqualTo(validator.context.Value().(time.Time), value)
+			return is.TimeEqualTo(validator.context.Value().(time.Time), value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -165,7 +130,7 @@ func (validator *ValidatorTime) EqualTo(value time.Time, template ...string) *Va
 func (validator *ValidatorTime) After(value time.Time, template ...string) *ValidatorTime {
 	validator.context.AddWithValue(
 		func() bool {
-			return isTimeAfter(validator.context.Value().(time.Time), value)
+			return is.TimeAfter(validator.context.Value().(time.Time), value)
 		},
 		ErrorKeyAfter, value, template...)
 
@@ -183,7 +148,7 @@ func (validator *ValidatorTime) After(value time.Time, template ...string) *Vali
 func (validator *ValidatorTime) AfterOrEqualTo(value time.Time, template ...string) *ValidatorTime {
 	validator.context.AddWithValue(
 		func() bool {
-			return isTimeAfterOrEqualTo(validator.context.Value().(time.Time), value)
+			return is.TimeAfterOrEqualTo(validator.context.Value().(time.Time), value)
 		},
 		ErrorKeyAfterOrEqualTo, value, template...)
 
@@ -200,7 +165,7 @@ func (validator *ValidatorTime) AfterOrEqualTo(value time.Time, template ...stri
 func (validator *ValidatorTime) Before(value time.Time, template ...string) *ValidatorTime {
 	validator.context.AddWithValue(
 		func() bool {
-			return isTimeBefore(validator.context.Value().(time.Time), value)
+			return is.TimeBefore(validator.context.Value().(time.Time), value)
 		},
 		ErrorKeyBefore, value, template...)
 
@@ -218,7 +183,7 @@ func (validator *ValidatorTime) Before(value time.Time, template ...string) *Val
 func (validator *ValidatorTime) BeforeOrEqualTo(value time.Time, template ...string) *ValidatorTime {
 	validator.context.AddWithValue(
 		func() bool {
-			return isTimeBeforeOrEqualTo(validator.context.Value().(time.Time), value)
+			return is.TimeBeforeOrEqualTo(validator.context.Value().(time.Time), value)
 		},
 		ErrorKeyBeforeOrEqualTo, value, template...)
 
@@ -236,7 +201,7 @@ func (validator *ValidatorTime) BeforeOrEqualTo(value time.Time, template ...str
 func (validator *ValidatorTime) Between(min time.Time, max time.Time, template ...string) *ValidatorTime {
 	validator.context.AddWithParams(
 		func() bool {
-			return isTimeBetween(validator.context.Value().(time.Time), min, max)
+			return is.TimeBetween(validator.context.Value().(time.Time), min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -255,7 +220,7 @@ func (validator *ValidatorTime) Between(min time.Time, max time.Time, template .
 func (validator *ValidatorTime) Zero(template ...string) *ValidatorTime {
 	validator.context.AddWithValue(
 		func() bool {
-			return isTimeZero(validator.context.Value().(time.Time))
+			return is.TimeZero(validator.context.Value().(time.Time))
 		},
 		ErrorKeyZero, validator.context.Value(), template...)
 
@@ -274,7 +239,7 @@ func (validator *ValidatorTime) Zero(template ...string) *ValidatorTime {
 func (validator *ValidatorTime) Passing(function func(v0 time.Time) bool, template ...string) *ValidatorTime {
 	validator.context.AddWithValue(
 		func() bool {
-			return function(validator.context.Value().(time.Time))
+			return is.Passing(validator.context.Value().(time.Time), function)
 		},
 		ErrorKeyPassing, validator.context.Value(), template...)
 
@@ -294,7 +259,7 @@ func (validator *ValidatorTime) Passing(function func(v0 time.Time) bool, templa
 func (validator *ValidatorTime) InSlice(slice []time.Time, template ...string) *ValidatorTime {
 	validator.context.AddWithValue(
 		func() bool {
-			return isTimeInSlice(validator.context.Value().(time.Time), slice)
+			return is.TimeInSlice(validator.context.Value().(time.Time), slice)
 		},
 		ErrorKeyInSlice, validator.context.Value(), template...)
 

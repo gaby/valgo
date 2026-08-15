@@ -22,6 +22,11 @@ Deprecated string length aliases kept until v1.0: `OfByteLength`,
 
 ## Numeric families
 
+Use `Int`/`IntP` for every signed integer width, `Uint`/`UintP` for every
+unsigned integer width, and `Float`/`FloatP` for both floating-point widths.
+The width-specific numeric constructors are deprecated aliases. `Rune` and
+`Byte` remain available for values with those semantics.
+
 - Common: `EqualTo`, `GreaterThan`, `GreaterOrEqualTo`, `LessThan`,
   `LessOrEqualTo`, `Between`, `Zero`, `InSlice`, `Passing`
 - Signed integers: `Positive`, `Negative`
@@ -48,3 +53,6 @@ Comparable validators do not provide ordering methods.
 
 - `Typed`: `Passing`, `Nil`
 - `Any`: `EqualTo`, `Passing`, `Nil`
+
+The `github.com/cohesivestack/valgo/is` package also exposes these rules as
+standalone boolean functions. See [Stateless Predicates](/validators/predicates/).

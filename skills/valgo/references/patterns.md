@@ -1,12 +1,12 @@
 # Verified consumer patterns
 
-These patterns were checked against the repository's v0.8.1 public source.
+These patterns were checked against the repository's v0.9.0 source.
 Load only the section needed for the task, adapt names and error handling to the
 consumer, and confirm version support before copying an API.
 
 ## Basic validation
 
-Valgo v0.8.1 does not provide an `Email()` rule. Use an existing project helper
+Valgo v0.9.0 does not provide an `Email()` rule. Use an existing project helper
 or a verified regex/predicate instead of inventing one.
 
 ```go
@@ -239,6 +239,22 @@ func ValidateShippingAddress(address Address) error {
 ```
 
 Avoid a helper that only hides one call and has no repeated domain meaning.
+
+When the effective version contains `github.com/cohesivestack/valgo/is`, use a
+stateless predicate for shared boolean logic that does not need Valgo errors:
+
+```go
+import "github.com/cohesivestack/valgo/is"
+
+func validUsername(username string) bool {
+  return !is.StringBlank(username) &&
+    is.StringLengthBetween(username, 3, 30)
+}
+```
+
+The predicate can also be passed to `v.String(...).Passing(validUsername)` when
+the caller needs a validation error. Do not use the subpackage with v0.8.1 or
+earlier, where it is absent.
 
 ## Custom validators
 

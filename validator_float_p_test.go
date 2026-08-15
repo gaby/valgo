@@ -10,11 +10,19 @@ import (
 func TestValidatorFloatPConstructor(t *testing.T) {
 	numberFloat32 := float32(1)
 
-	v := Is(Float32P(&numberFloat32).Not().Zero())
+	v := Is(FloatP(&numberFloat32).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(Float32P(&numberFloat32).Not().Zero())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	numberFloat64 := float64(1)
+
+	v = Is(FloatP(&numberFloat64).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
 
 	v = Is(Float64P(&numberFloat64).Not().Zero())
 	assert.True(t, v.Valid())

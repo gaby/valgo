@@ -1,5 +1,7 @@
 package valgo
 
+import "github.com/cohesivestack/valgo/is"
+
 // The Boolean pointer validator type that keeps its validator context.
 type ValidatorBoolP[T ~bool] struct {
 	context *ValidatorContext
@@ -101,7 +103,7 @@ func (validator *ValidatorBoolP[T]) OrElse() *ValidatorBoolP[T] {
 func (validator *ValidatorBoolP[T]) EqualTo(value T, template ...string) *ValidatorBoolP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isBoolEqual(*(validator.context.Value().(*T)), value)
+			return is.BoolPEqualTo(validator.context.Value().(*T), value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -116,7 +118,7 @@ func (validator *ValidatorBoolP[T]) EqualTo(value T, template ...string) *Valida
 func (validator *ValidatorBoolP[T]) True(template ...string) *ValidatorBoolP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isBoolTrue(*(validator.context.Value().(*T)))
+			return is.BoolPTrue(validator.context.Value().(*T))
 		},
 		ErrorKeyTrue, validator.context.Value(), template...)
 
@@ -131,7 +133,7 @@ func (validator *ValidatorBoolP[T]) True(template ...string) *ValidatorBoolP[T] 
 func (validator *ValidatorBoolP[T]) False(template ...string) *ValidatorBoolP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isBoolFalse(*(validator.context.Value().(*T)))
+			return is.BoolPFalse(validator.context.Value().(*T))
 		},
 		ErrorKeyFalse, validator.context.Value(), template...)
 
@@ -148,7 +150,7 @@ func (validator *ValidatorBoolP[T]) False(template ...string) *ValidatorBoolP[T]
 func (validator *ValidatorBoolP[T]) FalseOrNil(template ...string) *ValidatorBoolP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isBoolFalse(*(validator.context.Value().(*T)))
+			return is.BoolPFalseOrNil(validator.context.Value().(*T))
 		},
 		ErrorKeyFalse, validator.context.Value(), template...)
 
@@ -163,7 +165,7 @@ func (validator *ValidatorBoolP[T]) FalseOrNil(template ...string) *ValidatorBoo
 func (validator *ValidatorBoolP[T]) Nil(template ...string) *ValidatorBoolP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			return is.BoolPNil(validator.context.Value().(*T))
 		},
 		ErrorKeyNil, validator.context.Value(), template...)
 
@@ -180,7 +182,7 @@ func (validator *ValidatorBoolP[T]) Nil(template ...string) *ValidatorBoolP[T] {
 func (validator *ValidatorBoolP[T]) Passing(function func(v *T) bool, template ...string) *ValidatorBoolP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			return is.Passing(validator.context.Value().(*T), function)
 		},
 		ErrorKeyPassing, validator.context.Value(), template...)
 
@@ -196,7 +198,7 @@ func (validator *ValidatorBoolP[T]) Passing(function func(v *T) bool, template .
 func (validator *ValidatorBoolP[T]) InSlice(slice []T, template ...string) *ValidatorBoolP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isBoolInSlice(*(validator.context.Value().(*T)), slice)
+			return is.BoolPInSlice(validator.context.Value().(*T), slice)
 		},
 		ErrorKeyInSlice, validator.context.Value(), template...)
 

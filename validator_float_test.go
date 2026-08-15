@@ -7,12 +7,21 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestValidatorFloat64Not(t *testing.T) {
-	v := Is(Float32(float32(1)).Not().Zero())
+func TestValidatorFloatConstructor(t *testing.T) {
+
+	v := Is(Float(float32(1)).Not().Zero())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
-	v = Is(Float64(float64(1)).Not().Zero())
+	v = Is(Float(1.0).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(Float32(float32(1)).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(Float64(1.0).Not().Zero())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }

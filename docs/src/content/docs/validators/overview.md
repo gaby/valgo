@@ -5,6 +5,8 @@ description: Understand how Valgo validators work in Go, including names, titles
 
 A validator stores one value and a chain of rules. Pass validators to `Is()` or
 `Check()` to evaluate them and record any failures in a `Validation` session.
+If you only need an immediate boolean result, use the standalone functions in
+the [`is` predicate package](/validators/predicates/).
 
 ## Name and title
 

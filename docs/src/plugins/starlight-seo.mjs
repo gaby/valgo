@@ -1,4 +1,4 @@
-const ARCHIVED_VERSION_PATH = /^\/(?:0\.7|0\.8)(?:\/|$)/;
+const ARCHIVED_VERSION_PATH = /^\/(?:0\.7|0\.8(?:\.1)?)(?:\/|$)/;
 
 /**
  * Adds route-level SEO metadata that depends on the final Starlight route.

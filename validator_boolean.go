@@ -1,25 +1,6 @@
 package valgo
 
-func isBoolTrue[T ~bool](v T) bool {
-	return bool(v)
-}
-
-func isBoolFalse[T ~bool](v T) bool {
-	return !bool(v)
-}
-
-func isBoolEqual[T ~bool](v0 T, v1 T) bool {
-	return v0 == v1
-}
-
-func isBoolInSlice[T ~bool](v T, slice []T) bool {
-	for _, _v := range slice {
-		if v == _v {
-			return true
-		}
-	}
-	return false
-}
+import "github.com/cohesivestack/valgo/is"
 
 // The Boolean validator type that keeps its validator context.
 type ValidatorBool[T ~bool] struct {
@@ -122,7 +103,7 @@ func (validator *ValidatorBool[T]) OrElse() *ValidatorBool[T] {
 func (validator *ValidatorBool[T]) EqualTo(value T, template ...string) *ValidatorBool[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isBoolEqual(validator.context.Value().(T), value)
+			return is.BoolEqualTo(validator.context.Value().(T), value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -137,7 +118,7 @@ func (validator *ValidatorBool[T]) EqualTo(value T, template ...string) *Validat
 func (validator *ValidatorBool[T]) True(template ...string) *ValidatorBool[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isBoolTrue(validator.context.Value().(T))
+			return is.BoolTrue(validator.context.Value().(T))
 		},
 		ErrorKeyTrue, validator.context.Value(), template...)
 
@@ -152,7 +133,7 @@ func (validator *ValidatorBool[T]) True(template ...string) *ValidatorBool[T] {
 func (validator *ValidatorBool[T]) False(template ...string) *ValidatorBool[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isBoolFalse(validator.context.Value().(T))
+			return is.BoolFalse(validator.context.Value().(T))
 		},
 		ErrorKeyFalse, validator.context.Value(), template...)
 
@@ -169,7 +150,7 @@ func (validator *ValidatorBool[T]) False(template ...string) *ValidatorBool[T] {
 func (validator *ValidatorBool[T]) Passing(function func(v T) bool, template ...string) *ValidatorBool[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return function(validator.context.Value().(T))
+			return is.Passing(validator.context.Value().(T), function)
 		},
 		ErrorKeyPassing, validator.context.Value(), template...)
 
@@ -185,7 +166,7 @@ func (validator *ValidatorBool[T]) Passing(function func(v T) bool, template ...
 func (validator *ValidatorBool[T]) InSlice(slice []T, template ...string) *ValidatorBool[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isBoolInSlice(validator.context.Value().(T), slice)
+			return is.BoolInSlice(validator.context.Value().(T), slice)
 		},
 		ErrorKeyInSlice, validator.context.Value(), template...)
 

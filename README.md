@@ -149,6 +149,7 @@ npx skills add cohesivestack/valgo --skill valgo
   - [Typed & Any](https://valgo.build/validators/typed-any/)
   - [OR Operators (Or / OrElse)](https://valgo.build/validators/or-operators/)
   - [Rule Index](https://valgo.build/validators/rule-index/)
+  - [Stateless Predicates](https://valgo.build/validators/predicates/)
 - Extending
   - [Custom Validators](https://valgo.build/extending/custom-validators/)
 - Cookbook

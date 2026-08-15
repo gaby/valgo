@@ -16,11 +16,19 @@ func TestValidatorIntPConstructor(t *testing.T) {
 
 	numberInt8 := int8(1)
 
+	v = Is(IntP(&numberInt8).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
 	v = Is(Int8P(&numberInt8).Not().Zero())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	numberInt16 := int16(1)
+
+	v = Is(IntP(&numberInt16).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
 
 	v = Is(Int16P(&numberInt16).Not().Zero())
 	assert.True(t, v.Valid())
@@ -28,11 +36,19 @@ func TestValidatorIntPConstructor(t *testing.T) {
 
 	numberInt32 := int32(1)
 
+	v = Is(IntP(&numberInt32).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
 	v = Is(Int32P(&numberInt32).Not().Zero())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	numberInt64 := int64(1)
+
+	v = Is(IntP(&numberInt64).Not().Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
 
 	v = Is(Int64P(&numberInt64).Not().Zero())
 	assert.True(t, v.Valid())

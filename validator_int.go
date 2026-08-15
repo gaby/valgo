@@ -1,14 +1,16 @@
 package valgo
 
+import "github.com/cohesivestack/valgo/is"
+
 // The [ValidatorInt] provides functions for setting validation rules for a
 // int value types, or a custom type based on a int, int8, int16, int32, or int64.
-type ValidatorInt[T ~int | ~int8 | ~int16 | ~int32 | ~int64] struct {
+type ValidatorInt[T TypeInt] struct {
 	context *ValidatorContext
 }
 
-// Receives an int value to validate.
+// Int receives a signed integer value to validate.
 //
-// The value can also be a custom int type such as type Age int.
+// The value can be any Go signed integer type or a custom type based on one.
 //
 // Optionally, the function can receive a name and title, in that order,
 // to be displayed in the error messages. A `value_%N" pattern is used as a name in
@@ -16,7 +18,7 @@ type ValidatorInt[T ~int | ~int8 | ~int16 | ~int32 | ~int64] struct {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
-func Int[T ~int](value T, nameAndTitle ...string) *ValidatorInt[T] {
+func Int[T TypeInt](value T, nameAndTitle ...string) *ValidatorInt[T] {
 	return &ValidatorInt[T]{context: NewContext(value, nameAndTitle...)}
 }
 
@@ -30,8 +32,10 @@ func Int[T ~int](value T, nameAndTitle ...string) *ValidatorInt[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use Int instead.
 func Int8[T ~int8](value T, nameAndTitle ...string) *ValidatorInt[T] {
-	return &ValidatorInt[T]{context: NewContext(value, nameAndTitle...)}
+	return Int(value, nameAndTitle...)
 }
 
 // Receives an int16 value to validate.
@@ -44,8 +48,10 @@ func Int8[T ~int8](value T, nameAndTitle ...string) *ValidatorInt[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use Int instead.
 func Int16[T ~int16](value T, nameAndTitle ...string) *ValidatorInt[T] {
-	return &ValidatorInt[T]{context: NewContext(value, nameAndTitle...)}
+	return Int(value, nameAndTitle...)
 }
 
 // Receives an int32 value to validate.
@@ -58,8 +64,10 @@ func Int16[T ~int16](value T, nameAndTitle ...string) *ValidatorInt[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use Int instead.
 func Int32[T ~int32](value T, nameAndTitle ...string) *ValidatorInt[T] {
-	return &ValidatorInt[T]{context: NewContext(value, nameAndTitle...)}
+	return Int(value, nameAndTitle...)
 }
 
 // Receives an int64 value to validate.
@@ -72,8 +80,10 @@ func Int32[T ~int32](value T, nameAndTitle ...string) *ValidatorInt[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use Int instead.
 func Int64[T ~int64](value T, nameAndTitle ...string) *ValidatorInt[T] {
-	return &ValidatorInt[T]{context: NewContext(value, nameAndTitle...)}
+	return Int(value, nameAndTitle...)
 }
 
 // Receives a rune value to validate.
@@ -87,7 +97,7 @@ func Int64[T ~int64](value T, nameAndTitle ...string) *ValidatorInt[T] {
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
 func Rune[T ~rune](value T, nameAndTitle ...string) *ValidatorInt[T] {
-	return &ValidatorInt[T]{context: NewContext(value, nameAndTitle...)}
+	return Int(value, nameAndTitle...)
 }
 
 // Return the context of the validator. The context is useful to create a custom
@@ -172,7 +182,7 @@ func (validator *ValidatorInt[T]) OrElse() *ValidatorInt[T] {
 func (validator *ValidatorInt[T]) EqualTo(value T, template ...string) *ValidatorInt[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberEqualTo(validator.context.Value().(T), value)
+			return is.IntEqualTo(validator.context.Value().(T), value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -188,7 +198,7 @@ func (validator *ValidatorInt[T]) EqualTo(value T, template ...string) *Validato
 func (validator *ValidatorInt[T]) GreaterThan(value T, template ...string) *ValidatorInt[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberGreaterThan(validator.context.Value().(T), value)
+			return is.IntGreaterThan(validator.context.Value().(T), value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -204,7 +214,7 @@ func (validator *ValidatorInt[T]) GreaterThan(value T, template ...string) *Vali
 func (validator *ValidatorInt[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorInt[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberGreaterOrEqualTo(validator.context.Value().(T), value)
+			return is.IntGreaterOrEqualTo(validator.context.Value().(T), value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -220,7 +230,7 @@ func (validator *ValidatorInt[T]) GreaterOrEqualTo(value T, template ...string) 
 func (validator *ValidatorInt[T]) LessThan(value T, template ...string) *ValidatorInt[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberLessThan(validator.context.Value().(T), value)
+			return is.IntLessThan(validator.context.Value().(T), value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -236,7 +246,7 @@ func (validator *ValidatorInt[T]) LessThan(value T, template ...string) *Validat
 func (validator *ValidatorInt[T]) LessOrEqualTo(value T, template ...string) *ValidatorInt[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberLessOrEqualTo(validator.context.Value().(T), value)
+			return is.IntLessOrEqualTo(validator.context.Value().(T), value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -250,7 +260,7 @@ func (validator *ValidatorInt[T]) LessOrEqualTo(value T, template ...string) *Va
 func (validator *ValidatorInt[T]) Between(min T, max T, template ...string) *ValidatorInt[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return isNumberBetween(validator.context.Value().(T), min, max)
+			return is.IntBetween(validator.context.Value().(T), min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max, "value": validator.context.Value()},
@@ -267,7 +277,7 @@ func (validator *ValidatorInt[T]) Between(min T, max T, template ...string) *Val
 func (validator *ValidatorInt[T]) Zero(template ...string) *ValidatorInt[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberZero(validator.context.Value().(T))
+			return is.IntZero(validator.context.Value().(T))
 		},
 		ErrorKeyZero, validator.context.Value(), template...)
 
@@ -282,7 +292,7 @@ func (validator *ValidatorInt[T]) Zero(template ...string) *ValidatorInt[T] {
 func (validator *ValidatorInt[T]) Positive(template ...string) *ValidatorInt[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(T) > 0
+			return is.IntPositive(validator.context.Value().(T))
 		},
 		ErrorKeyPositive, validator.context.Value(), template...)
 
@@ -297,7 +307,7 @@ func (validator *ValidatorInt[T]) Positive(template ...string) *ValidatorInt[T] 
 func (validator *ValidatorInt[T]) Negative(template ...string) *ValidatorInt[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(T) < 0
+			return is.IntNegative(validator.context.Value().(T))
 		},
 		ErrorKeyNegative, validator.context.Value(), template...)
 
@@ -314,7 +324,7 @@ func (validator *ValidatorInt[T]) Negative(template ...string) *ValidatorInt[T] 
 func (validator *ValidatorInt[T]) Passing(function func(v T) bool, template ...string) *ValidatorInt[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return function(validator.context.Value().(T))
+			return is.IntPassing(validator.context.Value().(T), function)
 		},
 		ErrorKeyPassing, validator.context.Value(), template...)
 
@@ -330,7 +340,7 @@ func (validator *ValidatorInt[T]) Passing(function func(v T) bool, template ...s
 func (validator *ValidatorInt[T]) InSlice(slice []T, template ...string) *ValidatorInt[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberInSlice(validator.context.Value().(T), slice)
+			return is.IntInSlice(validator.context.Value().(T), slice)
 		},
 		ErrorKeyInSlice, validator.context.Value(), template...)
 

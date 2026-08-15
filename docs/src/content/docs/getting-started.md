@@ -17,8 +17,7 @@ Valgo can be customized to fit your application's needs, from overriding validat
 go get github.com/cohesivestack/valgo
 ```
 
-Valgo v0.8.1 is tested with Go 1.23 and later. Using one of these versions is
-recommended.
+Valgo v0.9.0 requires Go 1.23 or later.
 
 ## Agent skill
 
