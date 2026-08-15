@@ -1,5 +1,7 @@
 package valgo
 
+import "github.com/cohesivestack/valgo/is"
+
 //go:generate go run generator/main.go
 
 // The Numeric pointer validator type that keeps its validator context.
@@ -105,7 +107,7 @@ func (validator *ValidatorNumberP[T]) OrElse() *ValidatorNumberP[T] {
 func (validator *ValidatorNumberP[T]) EqualTo(value T, template ...string) *ValidatorNumberP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isNumberEqualTo(*(validator.context.Value().(*T)), value)
+			return is.NumberPEqualTo(validator.context.Value().(*T), value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -121,7 +123,7 @@ func (validator *ValidatorNumberP[T]) EqualTo(value T, template ...string) *Vali
 func (validator *ValidatorNumberP[T]) GreaterThan(value T, template ...string) *ValidatorNumberP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isNumberGreaterThan(*(validator.context.Value().(*T)), value)
+			return is.NumberPGreaterThan(validator.context.Value().(*T), value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -137,7 +139,7 @@ func (validator *ValidatorNumberP[T]) GreaterThan(value T, template ...string) *
 func (validator *ValidatorNumberP[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorNumberP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isNumberGreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			return is.NumberPGreaterOrEqualTo(validator.context.Value().(*T), value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -153,7 +155,7 @@ func (validator *ValidatorNumberP[T]) GreaterOrEqualTo(value T, template ...stri
 func (validator *ValidatorNumberP[T]) LessThan(value T, template ...string) *ValidatorNumberP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isNumberLessThan(*(validator.context.Value().(*T)), value)
+			return is.NumberPLessThan(validator.context.Value().(*T), value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -169,7 +171,7 @@ func (validator *ValidatorNumberP[T]) LessThan(value T, template ...string) *Val
 func (validator *ValidatorNumberP[T]) LessOrEqualTo(value T, template ...string) *ValidatorNumberP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isNumberLessOrEqualTo(*(validator.context.Value().(*T)), value)
+			return is.NumberPLessOrEqualTo(validator.context.Value().(*T), value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -184,7 +186,7 @@ func (validator *ValidatorNumberP[T]) LessOrEqualTo(value T, template ...string)
 func (validator *ValidatorNumberP[T]) Between(min T, max T, template ...string) *ValidatorNumberP[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isNumberBetween(*(validator.context.Value().(*T)), min, max)
+			return is.NumberPBetween(validator.context.Value().(*T), min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max, "value": validator.context.Value()},
@@ -202,7 +204,7 @@ func (validator *ValidatorNumberP[T]) Between(min T, max T, template ...string) 
 func (validator *ValidatorNumberP[T]) Zero(template ...string) *ValidatorNumberP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isNumberZero(*(validator.context.Value().(*T)))
+			return is.NumberPZero(validator.context.Value().(*T))
 		},
 		ErrorKeyZero, validator.context.Value(), template...)
 
@@ -218,7 +220,7 @@ func (validator *ValidatorNumberP[T]) Zero(template ...string) *ValidatorNumberP
 func (validator *ValidatorNumberP[T]) ZeroOrNil(template ...string) *ValidatorNumberP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isNumberZero(*(validator.context.Value().(*T)))
+			return is.NumberPZeroOrNil(validator.context.Value().(*T))
 		},
 		ErrorKeyZero, validator.context.Value(), template...)
 
@@ -234,7 +236,7 @@ func (validator *ValidatorNumberP[T]) ZeroOrNil(template ...string) *ValidatorNu
 func (validator *ValidatorNumberP[T]) Nil(template ...string) *ValidatorNumberP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			return is.NumberPNil(validator.context.Value().(*T))
 		},
 		ErrorKeyNil, validator.context.Value(), template...)
 
@@ -251,7 +253,7 @@ func (validator *ValidatorNumberP[T]) Nil(template ...string) *ValidatorNumberP[
 func (validator *ValidatorNumberP[T]) Passing(function func(v *T) bool, template ...string) *ValidatorNumberP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			return is.NumberPPassing(validator.context.Value().(*T), function)
 		},
 		ErrorKeyPassing, validator.context.Value(), template...)
 
@@ -267,7 +269,7 @@ func (validator *ValidatorNumberP[T]) Passing(function func(v *T) bool, template
 func (validator *ValidatorNumberP[T]) InSlice(slice []T, template ...string) *ValidatorNumberP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isNumberInSlice(*(validator.context.Value().(*T)), slice)
+			return is.NumberPInSlice(validator.context.Value().(*T), slice)
 		},
 		ErrorKeyInSlice, validator.context.Value(), template...)
 

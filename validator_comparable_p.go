@@ -1,8 +1,6 @@
 package valgo
 
-import (
-	"reflect"
-)
+import "github.com/cohesivestack/valgo/is"
 
 // The Comparable validator's type that keeps its validator context.
 // T can be any Go type (pointer, struct, etc.) that is comparable.
@@ -106,8 +104,7 @@ func (validator *ValidatorComparableP[T]) OrElse() *ValidatorComparableP[T] {
 func (validator *ValidatorComparableP[T]) EqualTo(value T, template ...string) *ValidatorComparableP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-
-			return validator.context.Value().(*T) != nil && *(validator.context.Value().(*T)) == value
+			return is.ComparablePEqualTo(validator.context.Value().(*T), value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -129,8 +126,7 @@ func (validator *ValidatorComparableP[T]) EqualTo(value T, template ...string) *
 func (validator *ValidatorComparableP[T]) Passing(function func(v *T) bool, template ...string) *ValidatorComparableP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			// Value is stored as interface{} inside the context; assert back to *T.
-			return function(validator.context.Value().(*T))
+			return is.Passing(validator.context.Value().(*T), function)
 		},
 		ErrorKeyPassing, validator.context.Value(), template...)
 
@@ -148,8 +144,7 @@ func (validator *ValidatorComparableP[T]) Passing(function func(v *T) bool, temp
 func (validator *ValidatorComparableP[T]) Nil(template ...string) *ValidatorComparableP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value() == nil ||
-				(reflect.ValueOf(validator.context.Value()).Kind() == reflect.Ptr && reflect.ValueOf(validator.context.Value()).IsNil())
+			return is.ComparablePNil(validator.context.Value().(*T))
 		},
 		ErrorKeyNil, validator.context.Value(), template...)
 
@@ -165,16 +160,7 @@ func (validator *ValidatorComparableP[T]) Nil(template ...string) *ValidatorComp
 func (validator *ValidatorComparableP[T]) InSlice(slice []T, template ...string) *ValidatorComparableP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			if validator.context.Value().(*T) == nil {
-				return false
-			}
-			v := *(validator.context.Value().(*T))
-			for _, s := range slice {
-				if v == s {
-					return true
-				}
-			}
-			return false
+			return is.ComparablePInSlice(validator.context.Value().(*T), slice)
 		},
 		ErrorKeyInSlice, validator.context.Value(), template...)
 

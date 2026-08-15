@@ -1,6 +1,6 @@
 package valgo
 
-import "reflect"
+import "github.com/cohesivestack/valgo/is"
 
 // The Typed validator's type that keeps its validator context.
 // T can be any Go type (pointer, struct, slice, map, etc.).
@@ -109,8 +109,7 @@ func (validator *ValidatorTyped[T]) OrElse() *ValidatorTyped[T] {
 func (validator *ValidatorTyped[T]) Passing(function func(v T) bool, template ...string) *ValidatorTyped[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			// Value is stored as interface{} inside the context; assert back to T.
-			return function(validator.context.Value().(T))
+			return is.Passing(validator.context.Value().(T), function)
 		},
 		ErrorKeyPassing, validator.context.Value(), template...)
 
@@ -128,12 +127,7 @@ func (validator *ValidatorTyped[T]) Passing(function func(v T) bool, template ..
 func (validator *ValidatorTyped[T]) Nil(template ...string) *ValidatorTyped[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			val := validator.context.Value()
-			// In Golang nil sometimes is not equal to raw nil, such as it's explained
-			// here: https://dev.to/arxeiss/in-go-nil-is-not-equal-to-nil-sometimes-jn8
-			// So, seems using reflection is the only option here
-			return val == nil ||
-				(reflect.ValueOf(val).Kind() == reflect.Ptr && reflect.ValueOf(val).IsNil())
+			return is.Nil(validator.context.Value())
 		},
 		ErrorKeyNil, validator.context.Value(), template...)
 

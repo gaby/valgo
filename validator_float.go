@@ -1,11 +1,17 @@
 package valgo
 
-import "math"
+import "github.com/cohesivestack/valgo/is"
 
 // The [ValidatorFloat] provides functions for setting validation rules for a
 // float value types, or a custom type based on a float32 or float64.
-type ValidatorFloat[T ~float32 | ~float64] struct {
+type ValidatorFloat[T TypeFloat] struct {
 	context *ValidatorContext
+}
+
+// Float receives a floating-point value to validate. It accepts float32,
+// float64, and custom types based on them.
+func Float[T TypeFloat](value T, nameAndTitle ...string) *ValidatorFloat[T] {
+	return &ValidatorFloat[T]{context: NewContext(value, nameAndTitle...)}
 }
 
 // Receives a float32 value to validate.
@@ -118,7 +124,7 @@ func (validator *ValidatorFloat[T]) OrElse() *ValidatorFloat[T] {
 func (validator *ValidatorFloat[T]) EqualTo(value T, template ...string) *ValidatorFloat[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberEqualTo(validator.context.Value().(T), value)
+			return is.FloatEqualTo(validator.context.Value().(T), value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -134,7 +140,7 @@ func (validator *ValidatorFloat[T]) EqualTo(value T, template ...string) *Valida
 func (validator *ValidatorFloat[T]) GreaterThan(value T, template ...string) *ValidatorFloat[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberGreaterThan(validator.context.Value().(T), value)
+			return is.FloatGreaterThan(validator.context.Value().(T), value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -150,7 +156,7 @@ func (validator *ValidatorFloat[T]) GreaterThan(value T, template ...string) *Va
 func (validator *ValidatorFloat[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorFloat[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberGreaterOrEqualTo(validator.context.Value().(T), value)
+			return is.FloatGreaterOrEqualTo(validator.context.Value().(T), value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -166,7 +172,7 @@ func (validator *ValidatorFloat[T]) GreaterOrEqualTo(value T, template ...string
 func (validator *ValidatorFloat[T]) LessThan(value T, template ...string) *ValidatorFloat[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberLessThan(validator.context.Value().(T), value)
+			return is.FloatLessThan(validator.context.Value().(T), value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -182,7 +188,7 @@ func (validator *ValidatorFloat[T]) LessThan(value T, template ...string) *Valid
 func (validator *ValidatorFloat[T]) LessOrEqualTo(value T, template ...string) *ValidatorFloat[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberLessOrEqualTo(validator.context.Value().(T), value)
+			return is.FloatLessOrEqualTo(validator.context.Value().(T), value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -196,7 +202,7 @@ func (validator *ValidatorFloat[T]) LessOrEqualTo(value T, template ...string) *
 func (validator *ValidatorFloat[T]) Between(min T, max T, template ...string) *ValidatorFloat[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return isNumberBetween(validator.context.Value().(T), min, max)
+			return is.FloatBetween(validator.context.Value().(T), min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max, "value": validator.context.Value()},
@@ -213,7 +219,7 @@ func (validator *ValidatorFloat[T]) Between(min T, max T, template ...string) *V
 func (validator *ValidatorFloat[T]) Zero(template ...string) *ValidatorFloat[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberZero(validator.context.Value().(T))
+			return is.FloatZero(validator.context.Value().(T))
 		},
 		ErrorKeyZero, validator.context.Value(), template...)
 
@@ -228,7 +234,7 @@ func (validator *ValidatorFloat[T]) Zero(template ...string) *ValidatorFloat[T] 
 func (validator *ValidatorFloat[T]) Positive(template ...string) *ValidatorFloat[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(T) > 0
+			return is.FloatPositive(validator.context.Value().(T))
 		},
 		ErrorKeyPositive, validator.context.Value(), template...)
 
@@ -243,7 +249,7 @@ func (validator *ValidatorFloat[T]) Positive(template ...string) *ValidatorFloat
 func (validator *ValidatorFloat[T]) Negative(template ...string) *ValidatorFloat[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(T) < 0
+			return is.FloatNegative(validator.context.Value().(T))
 		},
 		ErrorKeyNegative, validator.context.Value(), template...)
 
@@ -260,7 +266,7 @@ func (validator *ValidatorFloat[T]) Negative(template ...string) *ValidatorFloat
 func (validator *ValidatorFloat[T]) Passing(function func(v T) bool, template ...string) *ValidatorFloat[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return function(validator.context.Value().(T))
+			return is.FloatPassing(validator.context.Value().(T), function)
 		},
 		ErrorKeyPassing, validator.context.Value(), template...)
 
@@ -276,7 +282,7 @@ func (validator *ValidatorFloat[T]) Passing(function func(v T) bool, template ..
 func (validator *ValidatorFloat[T]) InSlice(slice []T, template ...string) *ValidatorFloat[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberInSlice(validator.context.Value().(T), slice)
+			return is.FloatInSlice(validator.context.Value().(T), slice)
 		},
 		ErrorKeyInSlice, validator.context.Value(), template...)
 
@@ -291,7 +297,7 @@ func (validator *ValidatorFloat[T]) InSlice(slice []T, template ...string) *Vali
 func (validator *ValidatorFloat[T]) NaN(template ...string) *ValidatorFloat[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return math.IsNaN(float64(validator.context.Value().(T)))
+			return is.FloatNaN(validator.context.Value().(T))
 		},
 		ErrorKeyNaN, validator.context.Value(), template...)
 
@@ -306,7 +312,7 @@ func (validator *ValidatorFloat[T]) NaN(template ...string) *ValidatorFloat[T] {
 func (validator *ValidatorFloat[T]) Infinite(template ...string) *ValidatorFloat[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return math.IsInf(float64(validator.context.Value().(T)), 0)
+			return is.FloatInfinite(validator.context.Value().(T))
 		},
 		ErrorKeyInfinite, validator.context.Value(), template...)
 
@@ -321,7 +327,7 @@ func (validator *ValidatorFloat[T]) Infinite(template ...string) *ValidatorFloat
 func (validator *ValidatorFloat[T]) Finite(template ...string) *ValidatorFloat[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return !math.IsNaN(float64(validator.context.Value().(T))) && !math.IsInf(float64(validator.context.Value().(T)), 0)
+			return is.FloatFinite(validator.context.Value().(T))
 		},
 		ErrorKeyFinite, validator.context.Value(), template...)
 

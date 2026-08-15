@@ -1,54 +1,27 @@
 package valgo
 
+import (
+	"github.com/cohesivestack/valgo/is"
+)
+
 //go:generate go run generator/main.go
 
-// Custom generic type covering all numeric types. This type is used as the
-// value type in ValidatorNumber and ValidatorNumberP.
-type TypeNumber interface {
-	~int |
-		~int8 |
-		~int16 |
-		~int32 |
-		~int64 |
-		~uint |
-		~uint8 |
-		~uint16 |
-		~uint32 |
-		~uint64 |
-		~float32 |
-		~float64
-}
+// TypeNumber covers all numeric types supported by ValidatorNumber and
+// ValidatorNumberP. It aliases [is.Number] so both packages share one canonical
+// constraint definition.
+type TypeNumber = is.Number
 
-func isNumberEqualTo[T TypeNumber](v0 T, v1 T) bool {
-	return v0 == v1
-}
+// TypeInt covers the signed integer types supported by Valgo's Int validators.
+// It aliases [is.Int].
+type TypeInt = is.Int
 
-func isNumberGreaterThan[T TypeNumber](v0 T, v1 T) bool {
-	return v0 > v1
-}
-func isNumberGreaterOrEqualTo[T TypeNumber](v0 T, v1 T) bool {
-	return v0 >= v1
-}
-func isNumberLessThan[T TypeNumber](v0 T, v1 T) bool {
-	return v0 < v1
-}
-func isNumberLessOrEqualTo[T TypeNumber](v0 T, v1 T) bool {
-	return v0 <= v1
-}
-func isNumberBetween[T TypeNumber](v T, min T, max T) bool {
-	return v >= min && v <= max
-}
-func isNumberZero[T TypeNumber](v T) bool {
-	return v == 0
-}
-func isNumberInSlice[T TypeNumber](v T, slice []T) bool {
-	for _, _v := range slice {
-		if v == _v {
-			return true
-		}
-	}
-	return false
-}
+// TypeUint covers the unsigned integer types supported by Valgo's Uint
+// validators. It aliases [is.Uint].
+type TypeUint = is.Uint
+
+// TypeFloat covers the floating-point types supported by Valgo. It aliases
+// [is.Float].
+type TypeFloat = is.Float
 
 // The [ValidatorNumber] provides functions for setting validation rules for a
 // [TypeNumber] value type, or a custom type based on a [TypeNumber].
@@ -157,7 +130,7 @@ func (validator *ValidatorNumber[T]) OrElse() *ValidatorNumber[T] {
 func (validator *ValidatorNumber[T]) EqualTo(value T, template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberEqualTo(validator.context.Value().(T), value)
+			return is.NumberEqualTo(validator.context.Value().(T), value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -173,7 +146,7 @@ func (validator *ValidatorNumber[T]) EqualTo(value T, template ...string) *Valid
 func (validator *ValidatorNumber[T]) GreaterThan(value T, template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberGreaterThan(validator.context.Value().(T), value)
+			return is.NumberGreaterThan(validator.context.Value().(T), value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -189,7 +162,7 @@ func (validator *ValidatorNumber[T]) GreaterThan(value T, template ...string) *V
 func (validator *ValidatorNumber[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberGreaterOrEqualTo(validator.context.Value().(T), value)
+			return is.NumberGreaterOrEqualTo(validator.context.Value().(T), value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -205,7 +178,7 @@ func (validator *ValidatorNumber[T]) GreaterOrEqualTo(value T, template ...strin
 func (validator *ValidatorNumber[T]) LessThan(value T, template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberLessThan(validator.context.Value().(T), value)
+			return is.NumberLessThan(validator.context.Value().(T), value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -221,7 +194,7 @@ func (validator *ValidatorNumber[T]) LessThan(value T, template ...string) *Vali
 func (validator *ValidatorNumber[T]) LessOrEqualTo(value T, template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberLessOrEqualTo(validator.context.Value().(T), value)
+			return is.NumberLessOrEqualTo(validator.context.Value().(T), value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -235,7 +208,7 @@ func (validator *ValidatorNumber[T]) LessOrEqualTo(value T, template ...string) 
 func (validator *ValidatorNumber[T]) Between(min T, max T, template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return isNumberBetween(validator.context.Value().(T), min, max)
+			return is.NumberBetween(validator.context.Value().(T), min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max, "value": validator.context.Value()},
@@ -252,7 +225,7 @@ func (validator *ValidatorNumber[T]) Between(min T, max T, template ...string) *
 func (validator *ValidatorNumber[T]) Zero(template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberZero(validator.context.Value().(T))
+			return is.NumberZero(validator.context.Value().(T))
 		},
 		ErrorKeyZero, validator.context.Value(), template...)
 
@@ -269,7 +242,7 @@ func (validator *ValidatorNumber[T]) Zero(template ...string) *ValidatorNumber[T
 func (validator *ValidatorNumber[T]) Passing(function func(v T) bool, template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return function(validator.context.Value().(T))
+			return is.NumberPassing(validator.context.Value().(T), function)
 		},
 		ErrorKeyPassing, validator.context.Value(), template...)
 
@@ -285,7 +258,7 @@ func (validator *ValidatorNumber[T]) Passing(function func(v T) bool, template .
 func (validator *ValidatorNumber[T]) InSlice(slice []T, template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return isNumberInSlice(validator.context.Value().(T), slice)
+			return is.NumberInSlice(validator.context.Value().(T), slice)
 		},
 		ErrorKeyInSlice, validator.context.Value(), template...)
 
