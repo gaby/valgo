@@ -24,8 +24,10 @@ func Float[T TypeFloat](value T, nameAndTitle ...string) *ValidatorFloat[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use Float instead.
 func Float32[T ~float32](value T, nameAndTitle ...string) *ValidatorFloat[T] {
-	return &ValidatorFloat[T]{context: NewContext(value, nameAndTitle...)}
+	return Float(value, nameAndTitle...)
 }
 
 // Receives a float64 value to validate.
@@ -38,8 +40,10 @@ func Float32[T ~float32](value T, nameAndTitle ...string) *ValidatorFloat[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use Float instead.
 func Float64[T ~float64](value T, nameAndTitle ...string) *ValidatorFloat[T] {
-	return &ValidatorFloat[T]{context: NewContext(value, nameAndTitle...)}
+	return Float(value, nameAndTitle...)
 }
 
 // Return the context of the validator. The context is useful to create a custom

@@ -32,8 +32,10 @@ func Int[T TypeInt](value T, nameAndTitle ...string) *ValidatorInt[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use Int instead.
 func Int8[T ~int8](value T, nameAndTitle ...string) *ValidatorInt[T] {
-	return &ValidatorInt[T]{context: NewContext(value, nameAndTitle...)}
+	return Int(value, nameAndTitle...)
 }
 
 // Receives an int16 value to validate.
@@ -46,8 +48,10 @@ func Int8[T ~int8](value T, nameAndTitle ...string) *ValidatorInt[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use Int instead.
 func Int16[T ~int16](value T, nameAndTitle ...string) *ValidatorInt[T] {
-	return &ValidatorInt[T]{context: NewContext(value, nameAndTitle...)}
+	return Int(value, nameAndTitle...)
 }
 
 // Receives an int32 value to validate.
@@ -60,8 +64,10 @@ func Int16[T ~int16](value T, nameAndTitle ...string) *ValidatorInt[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use Int instead.
 func Int32[T ~int32](value T, nameAndTitle ...string) *ValidatorInt[T] {
-	return &ValidatorInt[T]{context: NewContext(value, nameAndTitle...)}
+	return Int(value, nameAndTitle...)
 }
 
 // Receives an int64 value to validate.
@@ -74,8 +80,10 @@ func Int32[T ~int32](value T, nameAndTitle ...string) *ValidatorInt[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use Int instead.
 func Int64[T ~int64](value T, nameAndTitle ...string) *ValidatorInt[T] {
-	return &ValidatorInt[T]{context: NewContext(value, nameAndTitle...)}
+	return Int(value, nameAndTitle...)
 }
 
 // Receives a rune value to validate.
@@ -89,7 +97,7 @@ func Int64[T ~int64](value T, nameAndTitle ...string) *ValidatorInt[T] {
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
 func Rune[T ~rune](value T, nameAndTitle ...string) *ValidatorInt[T] {
-	return &ValidatorInt[T]{context: NewContext(value, nameAndTitle...)}
+	return Int(value, nameAndTitle...)
 }
 
 // Return the context of the validator. The context is useful to create a custom

@@ -32,8 +32,10 @@ func Uint[T TypeUint](value T, nameAndTitle ...string) *ValidatorUint[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use Uint instead.
 func Uint8[T ~uint8](value T, nameAndTitle ...string) *ValidatorUint[T] {
-	return &ValidatorUint[T]{context: NewContext(value, nameAndTitle...)}
+	return Uint(value, nameAndTitle...)
 }
 
 // Receives an uint16 value to validate.
@@ -46,8 +48,10 @@ func Uint8[T ~uint8](value T, nameAndTitle ...string) *ValidatorUint[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use Uint instead.
 func Uint16[T ~uint16](value T, nameAndTitle ...string) *ValidatorUint[T] {
-	return &ValidatorUint[T]{context: NewContext(value, nameAndTitle...)}
+	return Uint(value, nameAndTitle...)
 }
 
 // Receives an uint32 value to validate.
@@ -60,8 +64,10 @@ func Uint16[T ~uint16](value T, nameAndTitle ...string) *ValidatorUint[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use Uint instead.
 func Uint32[T ~uint32](value T, nameAndTitle ...string) *ValidatorUint[T] {
-	return &ValidatorUint[T]{context: NewContext(value, nameAndTitle...)}
+	return Uint(value, nameAndTitle...)
 }
 
 // Receives an uint64 value to validate.
@@ -74,8 +80,10 @@ func Uint32[T ~uint32](value T, nameAndTitle ...string) *ValidatorUint[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use Uint instead.
 func Uint64[T ~uint64](value T, nameAndTitle ...string) *ValidatorUint[T] {
-	return &ValidatorUint[T]{context: NewContext(value, nameAndTitle...)}
+	return Uint(value, nameAndTitle...)
 }
 
 // Receives an byte value to validate.
@@ -89,7 +97,7 @@ func Uint64[T ~uint64](value T, nameAndTitle ...string) *ValidatorUint[T] {
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
 func Byte[T ~byte](value T, nameAndTitle ...string) *ValidatorUint[T] {
-	return &ValidatorUint[T]{context: NewContext(value, nameAndTitle...)}
+	return Uint(value, nameAndTitle...)
 }
 
 // Return the context of the validator. The context is useful to create a custom

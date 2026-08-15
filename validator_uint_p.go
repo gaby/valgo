@@ -33,8 +33,10 @@ func UintP[T TypeUint](value *T, nameAndTitle ...string) *ValidatorUintP[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use UintP instead.
 func Uint8P[T ~uint8](value *T, nameAndTitle ...string) *ValidatorUintP[T] {
-	return &ValidatorUintP[T]{context: NewContext(value, nameAndTitle...)}
+	return UintP(value, nameAndTitle...)
 }
 
 // Receives an uint16 pointer value to validate.
@@ -47,8 +49,10 @@ func Uint8P[T ~uint8](value *T, nameAndTitle ...string) *ValidatorUintP[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use UintP instead.
 func Uint16P[T ~uint16](value *T, nameAndTitle ...string) *ValidatorUintP[T] {
-	return &ValidatorUintP[T]{context: NewContext(value, nameAndTitle...)}
+	return UintP(value, nameAndTitle...)
 }
 
 // Receives an uint32 pointer value to validate.
@@ -61,8 +65,10 @@ func Uint16P[T ~uint16](value *T, nameAndTitle ...string) *ValidatorUintP[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use UintP instead.
 func Uint32P[T ~uint32](value *T, nameAndTitle ...string) *ValidatorUintP[T] {
-	return &ValidatorUintP[T]{context: NewContext(value, nameAndTitle...)}
+	return UintP(value, nameAndTitle...)
 }
 
 // Receives an uint64 pointer value to validate.
@@ -75,8 +81,10 @@ func Uint32P[T ~uint32](value *T, nameAndTitle ...string) *ValidatorUintP[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use UintP instead.
 func Uint64P[T ~uint64](value *T, nameAndTitle ...string) *ValidatorUintP[T] {
-	return &ValidatorUintP[T]{context: NewContext(value, nameAndTitle...)}
+	return UintP(value, nameAndTitle...)
 }
 
 // Receives a byte pointer value to validate.
@@ -90,7 +98,7 @@ func Uint64P[T ~uint64](value *T, nameAndTitle ...string) *ValidatorUintP[T] {
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
 func ByteP[T ~byte](value *T, nameAndTitle ...string) *ValidatorUintP[T] {
-	return &ValidatorUintP[T]{context: NewContext(value, nameAndTitle...)}
+	return UintP(value, nameAndTitle...)
 }
 
 // Return the context of the validator. The context is useful to create a custom

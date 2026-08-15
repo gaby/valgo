@@ -33,8 +33,10 @@ func IntP[T TypeInt](value *T, nameAndTitle ...string) *ValidatorIntP[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use IntP instead.
 func Int8P[T ~int8](value *T, nameAndTitle ...string) *ValidatorIntP[T] {
-	return &ValidatorIntP[T]{context: NewContext(value, nameAndTitle...)}
+	return IntP(value, nameAndTitle...)
 }
 
 // Receives an int16 pointer value to validate.
@@ -47,8 +49,10 @@ func Int8P[T ~int8](value *T, nameAndTitle ...string) *ValidatorIntP[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use IntP instead.
 func Int16P[T ~int16](value *T, nameAndTitle ...string) *ValidatorIntP[T] {
-	return &ValidatorIntP[T]{context: NewContext(value, nameAndTitle...)}
+	return IntP(value, nameAndTitle...)
 }
 
 // Receives an int32 pointer value to validate.
@@ -61,8 +65,10 @@ func Int16P[T ~int16](value *T, nameAndTitle ...string) *ValidatorIntP[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use IntP instead.
 func Int32P[T ~int32](value *T, nameAndTitle ...string) *ValidatorIntP[T] {
-	return &ValidatorIntP[T]{context: NewContext(value, nameAndTitle...)}
+	return IntP(value, nameAndTitle...)
 }
 
 // Receives an int64 pointer value to validate.
@@ -75,8 +81,10 @@ func Int32P[T ~int32](value *T, nameAndTitle ...string) *ValidatorIntP[T] {
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
+//
+// Deprecated: use IntP instead.
 func Int64P[T ~int64](value *T, nameAndTitle ...string) *ValidatorIntP[T] {
-	return &ValidatorIntP[T]{context: NewContext(value, nameAndTitle...)}
+	return IntP(value, nameAndTitle...)
 }
 
 // Receives a rune pointer value to validate.
@@ -90,7 +98,7 @@ func Int64P[T ~int64](value *T, nameAndTitle ...string) *ValidatorIntP[T] {
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
 func RuneP[T ~rune](value *T, nameAndTitle ...string) *ValidatorIntP[T] {
-	return &ValidatorIntP[T]{context: NewContext(value, nameAndTitle...)}
+	return IntP(value, nameAndTitle...)
 }
 
 // Return the context of the validator. The context is useful to create a custom
