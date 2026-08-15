@@ -39,6 +39,7 @@ export const docsSidebar = [
       { label: 'Typed & Any', link: '/validators/typed-any/' },
       { label: 'OR Operators (Or / OrElse)', link: '/validators/or-operators/' },
       { label: 'Rule Index', link: '/validators/rule-index/' },
+      { label: 'Stateless Predicates', link: '/validators/predicates/' },
     ],
   },
   {

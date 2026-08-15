@@ -1,12 +1,12 @@
 ---
 title: Go Validators Overview
-description: Understand how Valgo validators work in Go, including names, titles, Not(), rule evaluation, and validation chains.
+description: Understand how Valgo validators work in Go, including names,
+  titles, Not(), rule evaluation, and validation chains.
+slug: 0.8.1/validators/overview
 ---
 
 A validator stores one value and a chain of rules. Pass validators to `Is()` or
 `Check()` to evaluate them and record any failures in a `Validation` session.
-If you only need an immediate boolean result, use the standalone functions in
-the [`is` predicate package](/validators/predicates/).
 
 ## Name and title
 

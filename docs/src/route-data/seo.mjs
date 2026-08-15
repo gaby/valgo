@@ -1,6 +1,6 @@
 import { defineRouteMiddleware } from '@astrojs/starlight/route-data';
 
-const ARCHIVED_VERSION_PATH = /^\/(?:0\.7|0\.8)(?:\/|$)/;
+const ARCHIVED_VERSION_PATH = /^\/(?:0\.7|0\.8(?:\.1)?)(?:\/|$)/;
 
 export const onRequest = defineRouteMiddleware((context) => {
   const { pathname } = context.url;
@@ -25,7 +25,7 @@ export const onRequest = defineRouteMiddleware((context) => {
 
   const { head } = context.locals.starlightRoute;
   const currentPathname =
-    pathname.replace(/^\/(?:0\.7|0\.8)(?=\/|$)/, '').replace('/validators/or-operator/', '/validators/or-operators/') ||
+    pathname.replace(/^\/(?:0\.7|0\.8(?:\.1)?)(?=\/|$)/, '').replace('/validators/or-operator/', '/validators/or-operators/') ||
     '/';
   const currentUrl = new URL(currentPathname, context.site ?? context.url.origin);
 
