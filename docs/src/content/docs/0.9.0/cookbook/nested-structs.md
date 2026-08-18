@@ -1,0 +1,21 @@
+---
+title: Validate Nested Structs in Go
+description: Validate nested Go structs with Valgo namespaces using In() and
+  structured validation error paths.
+slug: 0.9.0/cookbook/nested-structs
+---
+
+```go
+val := v.In("person",
+  v.Is(
+    v.String(p.Name, "name").Not().Blank(),
+  ),
+).In("address",
+  v.Is(
+    v.String(p.Address.Line1, "line1").Not().Blank(),
+    v.String(p.Address.City, "city").Not().Blank(),
+  ),
+)
+```
+
+This produces paths like `person.name`, `address.city`.

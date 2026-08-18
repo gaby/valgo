@@ -1,6 +1,8 @@
 ---
 title: String Validators for Go
-description: Validate Go strings and *string pointers with Valgo, including blank checks, rune length, byte length, equality, and custom rules.
+description: Validate Go strings and *string pointers with Valgo, including
+  blank checks, rune length, byte length, equality, and custom rules.
+slug: 0.9.0/validators/string
 ---
 
 Use `v.String(value, name?, title?)` and `v.StringP(&value, ...)`.
@@ -9,27 +11,10 @@ Common rules:
 
 ```go
 v.Is(v.String("Dennis").EqualTo("Dennis"))
-v.Is(v.String("RUNNING").EqualFold("running"))
 v.Is(v.String("").Empty())
 v.Is(v.String(" ").Blank())
 v.Is(v.String("processing").InSlice([]string{"idle", "processing"}))
 ```
-
-## Case-insensitive equality
-
-Use `EqualFold()` to compare strings case-insensitively with Unicode simple
-case folding. It has the same comparison semantics as `strings.EqualFold`:
-
-```go
-v.Is(v.String("RUNNING").EqualFold("running"))
-
-status := "RUNNING"
-v.Is(v.StringP(&status).EqualFold("running"))
-```
-
-`EqualFold()` does not normalize Unicode text or perform full case folding.
-For example, `"Straße"` and `"STRASSE"` are not equal under simple case
-folding. A nil `StringP` value also fails `EqualFold()`.
 
 ## Length: bytes vs characters
 

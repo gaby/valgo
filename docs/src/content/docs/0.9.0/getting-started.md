@@ -1,6 +1,8 @@
 ---
 title: Getting Started with Go Validation
-description: Install Valgo, a type-safe Go validation library without struct tags, and learn Is(), Check(), and New() with examples.
+description: Install Valgo, a type-safe Go validation library without struct
+  tags, and learn Is(), Check(), and New() with examples.
+slug: 0.9.0/getting-started
 ---
 
 ## Introduction
@@ -17,7 +19,7 @@ Valgo can be customized to fit your application's needs, from overriding validat
 go get github.com/cohesivestack/valgo
 ```
 
-Valgo v0.9.1 has been tested with Go 1.23 and later.
+Valgo v0.9.0 has been tested with Go 1.23 and later.
 
 ## Agent skill
 
@@ -106,22 +108,22 @@ func validateRegistration(input Registration) *v.Validation {
 
 The example assumes that the application provides `verifyPostalCode`.
 
-- `Or()` accepts `email` or `sms` as the contact preference.
-- `OrElse()` accepts an empty referral code without evaluating the regex.
-- `IfPathValid()` merges the password-confirmation validation only after the
+* `Or()` accepts `email` or `sms` as the contact preference.
+* `OrElse()` accepts an empty referral code without evaluating the regex.
+* `IfPathValid()` merges the password-confirmation validation only after the
   password passes.
-- `In("address", ...)` prefixes nested errors with `address`.
-- `WhenAllValid()` calls postal-code verification only after the initial
+* `In("address", ...)` prefixes nested errors with `address`.
+* `WhenAllValid()` calls postal-code verification only after the initial
   country and postal-code rules pass.
 
-See [OR operators](/validators/or-operators/),
-[conditional validation](/using-valgo/conditional-flows/), and
-[namespaces](/using-valgo/namespaces/) for the detailed behavior.
+See [OR operators](/0.9.0/validators/or-operators/),
+[conditional validation](/0.9.0/using-valgo/conditional-flows/), and
+[namespaces](/0.9.0/using-valgo/namespaces/) for the detailed behavior.
 
 ## When to use `Is` vs `Check`
 
-- `Is(...)`: stops a validator chain after its first failed rule.
-- `Check(...)`: continues evaluating rules after failures so it can collect
+* `Is(...)`: stops a validator chain after its first failed rule.
+* `Check(...)`: continues evaluating rules after failures so it can collect
   multiple messages. A successful `OrElse()` still cuts the remainder of its
   chain by design.
 
@@ -137,9 +139,9 @@ _ = val.Valid() // false, with 2 messages for full_name
 
 Use namespaces to build structured paths:
 
-- `In("ns", ...)` for nested structs
-- `InRow("list", i, ...)` for slices of structs
-- `InCell("list", i, ...)` for slices of scalar values
+* `In("ns", ...)` for nested structs
+* `InRow("list", i, ...)` for slices of structs
+* `InCell("list", i, ...)` for slices of scalar values
 
-See [Namespaces](/using-valgo/namespaces/) and
-[Slices and indexed errors](/cookbook/slices/) for complete examples.
+See [Namespaces](/0.9.0/using-valgo/namespaces/) and
+[Slices and indexed errors](/0.9.0/cookbook/slices/) for complete examples.

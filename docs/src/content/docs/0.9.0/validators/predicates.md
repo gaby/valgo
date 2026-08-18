@@ -1,6 +1,8 @@
 ---
 title: Stateless Go Validation Predicates
-description: Use Valgo validation rules as standalone, type-safe boolean functions without validation sessions, error messages, or localization.
+description: Use Valgo validation rules as standalone, type-safe boolean
+  functions without validation sessions, error messages, or localization.
+slug: 0.9.0/validators/predicates
 ---
 
 The `github.com/cohesivestack/valgo/is` package exposes Valgo's built-in rule
@@ -42,7 +44,7 @@ to `!is.StringBlank(name)`.
 
 | Family | Available value predicates |
 | --- | --- |
-| `String` | `EqualTo`, `EqualFold`, ordering, inclusive `Between`, `Empty`, `Blank`, `InSlice`, `MatchingTo`, byte-length rules, and rune-length rules |
+| `String` | `EqualTo`, ordering, inclusive `Between`, `Empty`, `Blank`, `InSlice`, `MatchingTo`, byte-length rules, and rune-length rules |
 | `Number` | `EqualTo`, ordering, inclusive `Between`, `Zero`, `InSlice`, and `Passing` |
 | `Int` | Number rules plus `Positive` and `Negative` |
 | `Uint` | Number rules for unsigned integers |
@@ -57,11 +59,6 @@ String byte functions are `StringMaxBytes`, `StringMinBytes`,
 functions are `StringMaxLength`, `StringMinLength`, `StringLength`, and
 `StringLengthBetween`; they count UTF-8 runes just like the corresponding
 validator methods.
-
-`StringEqualFold` and `StringPEqualFold` provide case-insensitive comparison
-using Unicode simple case folding, matching `strings.EqualFold`. They do not
-normalize text or perform full case folding. `StringPEqualFold` returns false
-for a nil pointer.
 
 The exported `Number`, `Int`, `Uint`, and `Float` constraints are available for
 generic helpers. For example, a helper that spans every supported numeric type
@@ -79,11 +76,11 @@ Pointer variants insert `P` between the family and rule names:
 `StringPBlank`, `IntPPositive`, `FloatPFinite`, and so on. A nil pointer fails
 ordinary pointer predicates. Explicit nil-accepting predicates include:
 
-- `StringPEmptyOrNil` and `StringPBlankOrNil`
-- `NumberPZeroOrNil`, `IntPZeroOrNil`, `UintPZeroOrNil`, and
+* `StringPEmptyOrNil` and `StringPBlankOrNil`
+* `NumberPZeroOrNil`, `IntPZeroOrNil`, `UintPZeroOrNil`, and
   `FloatPZeroOrNil`
-- `BoolPFalseOrNil`
-- `TimePNilOrZero`
+* `BoolPFalseOrNil`
+* `TimePNilOrZero`
 
 Each pointer family also provides a `PNil` function, such as `StringPNil` or
 `TimePNil`.

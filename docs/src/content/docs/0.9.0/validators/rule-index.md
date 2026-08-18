@@ -1,6 +1,8 @@
 ---
 title: Go Validation Rule Index
-description: Browse Valgo validation rules and constructors for Go strings, numbers, booleans, times, comparable values, and dynamic values.
+description: Browse Valgo validation rules and constructors for Go strings,
+  numbers, booleans, times, comparable values, and dynamic values.
+slug: 0.9.0/validators/rule-index
 ---
 
 All validators provide `Not()`, `Or()`, and `OrElse()`. Most rule methods also
@@ -8,14 +10,14 @@ accept an optional custom message template as their last argument.
 
 ## String and StringP
 
-- Equality and ordering: `EqualTo`, `EqualFold`, `GreaterThan`,
-  `GreaterOrEqualTo`, `LessThan`, `LessOrEqualTo`, `Between`
-- Presence: `Empty`, `Blank`; pointer forms also have `EmptyOrNil`,
+* Equality and ordering: `EqualTo`, `GreaterThan`, `GreaterOrEqualTo`,
+  `LessThan`, `LessOrEqualTo`, `Between`
+* Presence: `Empty`, `Blank`; pointer forms also have `EmptyOrNil`,
   `BlankOrNil`, and `Nil`
-- Length in bytes: `MaxBytes`, `MinBytes`, `ByteLength`,
+* Length in bytes: `MaxBytes`, `MinBytes`, `ByteLength`,
   `ByteLengthBetween`
-- Length in runes: `MaxLength`, `MinLength`, `Length`, `LengthBetween`
-- Other: `InSlice`, `MatchingTo`, `Passing`
+* Length in runes: `MaxLength`, `MinLength`, `Length`, `LengthBetween`
+* Other: `InSlice`, `MatchingTo`, `Passing`
 
 Deprecated string length aliases kept until v1.0: `OfByteLength`,
 `OfByteLengthBetween`, `OfLength`, and `OfLengthBetween`.
@@ -27,11 +29,11 @@ unsigned integer width, and `Float`/`FloatP` for both floating-point widths.
 The width-specific numeric constructors are deprecated aliases. `Rune` and
 `Byte` remain available for values with those semantics.
 
-- Common: `EqualTo`, `GreaterThan`, `GreaterOrEqualTo`, `LessThan`,
+* Common: `EqualTo`, `GreaterThan`, `GreaterOrEqualTo`, `LessThan`,
   `LessOrEqualTo`, `Between`, `Zero`, `InSlice`, `Passing`
-- Signed integers: `Positive`, `Negative`
-- Floats: `Positive`, `Negative`, `NaN`, `Infinite`, `Finite`
-- Pointer variants: `Nil`, `ZeroOrNil`
+* Signed integers: `Positive`, `Negative`
+* Floats: `Positive`, `Negative`, `NaN`, `Infinite`, `Finite`
+* Pointer variants: `Nil`, `ZeroOrNil`
 
 ## Boolean
 
@@ -51,8 +53,8 @@ Comparable validators do not provide ordering methods.
 
 ## Typed and Any
 
-- `Typed`: `Passing`, `Nil`
-- `Any`: `EqualTo`, `Passing`, `Nil`
+* `Typed`: `Passing`, `Nil`
+* `Any`: `EqualTo`, `Passing`, `Nil`
 
 The `github.com/cohesivestack/valgo/is` package also exposes these rules as
-standalone boolean functions. See [Stateless Predicates](/validators/predicates/).
+standalone boolean functions. See [Stateless Predicates](/0.9.0/validators/predicates/).

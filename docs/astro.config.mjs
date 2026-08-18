@@ -9,6 +9,7 @@ import { isArchivedVersionUrl, starlightSeo } from './src/plugins/starlight-seo.
 export default defineConfig({
   site: 'https://valgo.build',
   redirects: {
+    '/0.9.0': '/0.9.0/getting-started/',
     '/0.8.1': '/0.8.1/getting-started/',
     '/0.8': '/0.8/getting-started/',
     '/0.7': '/0.7/getting-started/',
@@ -66,11 +67,12 @@ export default defineConfig({
           // When you run the site, the plugin will archive the current docs state
           // under the first configured version slug.
           versions: [
+            { slug: '0.9.0', label: 'v0.9.0' },
             { slug: '0.8.1', label: 'v0.8.1' },
             { slug: '0.8', label: 'v0.8' },
             { slug: '0.7', label: 'v0.7' },
           ],
-          current: { label: 'v0.9.0 Latest' },
+          current: { label: 'v0.9.1 Latest' },
         }),
       ],
       sidebar: docsSidebar,
