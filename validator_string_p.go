@@ -115,6 +115,24 @@ func (validator *ValidatorStringP[T]) EqualTo(value T, template ...string) *Vali
 	return validator
 }
 
+// EqualFold validates that the value of a string pointer is equal to another
+// under Unicode simple case folding (a form of case-insensitive comparison).
+// This function internally uses strings.EqualFold and does not normalize the
+// strings before comparing them. A nil pointer is not equal to any string.
+// For example:
+//
+//	status := "RUNNING"
+//	Is(v.StringP(&status).EqualFold("running"))
+func (validator *ValidatorStringP[T]) EqualFold(value T, template ...string) *ValidatorStringP[T] {
+	validator.context.AddWithValue(
+		func() bool {
+			return is.StringPEqualFold(validator.context.Value().(*T), value)
+		},
+		ErrorKeyEqualTo, value, template...)
+
+	return validator
+}
+
 // Validate if a string value is greater than another. This function internally
 // uses the golang `>` operator.
 // For example:

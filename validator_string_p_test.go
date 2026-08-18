@@ -69,6 +69,65 @@ func TestValidatorStringPEqualToInvalid(t *testing.T) {
 		v.Errors()["value_0"].Messages()[0])
 }
 
+func TestValidatorStringPEqualFoldValid(t *testing.T) {
+	for _, test := range []struct {
+		value    string
+		expected string
+	}{
+		{value: "text", expected: "TEXT"},
+		{value: "Σ", expected: "ς"},
+		{value: "Kelvin K", expected: "kelvin k"},
+	} {
+		v := Is(StringP(&test.value).EqualFold(test.expected))
+		assert.True(t, v.Valid())
+		assert.Empty(t, v.Errors())
+	}
+
+	// Custom Type
+	type MyString string
+	var value MyString = "TEXT"
+	var expected MyString = "text"
+
+	v := Is(StringP(&value).EqualFold(expected))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorStringPEqualFoldInvalid(t *testing.T) {
+	for _, test := range []struct {
+		value    string
+		expected string
+	}{
+		{value: "text1", expected: "text2"},
+		// EqualFold uses simple rather than full Unicode case folding.
+		{value: "Straße", expected: "STRASSE"},
+		// EqualFold does not perform Unicode normalization.
+		{value: "é", expected: "e\u0301"},
+	} {
+		v := Is(StringP(&test.value).EqualFold(test.expected))
+		assert.False(t, v.Valid())
+		assert.Equal(t,
+			"Value 0 must be equal to \""+test.expected+"\"",
+			v.Errors()["value_0"].Messages()[0])
+	}
+
+	var value *string
+	v := Is(StringP(value).EqualFold("text"))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must be equal to \"text\"",
+		v.Errors()["value_0"].Messages()[0])
+}
+
+func TestValidatorStringPEqualFoldNot(t *testing.T) {
+	value := "text"
+	v := Is(StringP(&value).Not().EqualFold("TEXT"))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 can't be equal to \"TEXT\"",
+		v.Errors()["value_0"].Messages()[0])
+}
+
 func TestValidatorStringPGreaterThanValid(t *testing.T) {
 	var v *Validation
 

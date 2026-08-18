@@ -116,6 +116,24 @@ func (validator *ValidatorString[T]) EqualTo(value T, template ...string) *Valid
 	return validator
 }
 
+// EqualFold validates that a string value is equal to another under Unicode
+// simple case folding (a form of case-insensitive comparison). This function
+// internally uses strings.EqualFold and does not normalize the strings before
+// comparing them.
+// For example:
+//
+//	status := "RUNNING"
+//	Is(v.String(status).EqualFold("running"))
+func (validator *ValidatorString[T]) EqualFold(value T, template ...string) *ValidatorString[T] {
+	validator.context.AddWithValue(
+		func() bool {
+			return is.StringEqualFold(validator.context.Value().(T), value)
+		},
+		ErrorKeyEqualTo, value, template...)
+
+	return validator
+}
+
 // Validate if a string value is greater than another. This function internally
 // uses the golang `>` operator.
 // For example:
