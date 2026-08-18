@@ -113,6 +113,9 @@ release. Use unversioned latest docs only under priority 4 above.
    for floating-point values regardless of width. On older versions, use the
    width-specific constructor. Do not replace pointer absence with a sentinel
    zero value.
+   For strings, use `EqualTo` for exact equality. Use `EqualFold` only when the
+   effective version provides it and Unicode simple case-insensitive comparison
+   is intended; it does not normalize text or perform full case folding.
 5. Give validators stable machine-readable names. Use titles only when display
    text must differ from the field name.
 6. Use `In` for nested objects, `InRow` for slices of objects, and `InCell` for

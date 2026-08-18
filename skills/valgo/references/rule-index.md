@@ -1,8 +1,8 @@
 # Validator selection and rule orientation
 
-Use this compact index to choose where to look. It reflects the Valgo v0.9.0
-source when this reference was written; confirm constructors and methods in the
-consumer's effective Valgo source before generating code.
+Use this compact index to choose where to look. It reflects the Valgo v0.9.1
+source; confirm constructors and methods in the consumer's effective Valgo
+source before generating code.
 
 ## Choose the narrowest constructor
 
@@ -29,11 +29,11 @@ the matching width-specific constructor.
 
 ## Find the relevant rule family
 
-- `String`/`StringP`: equality and ordering; `Empty`, `Blank`; byte rules
-  `MaxBytes`, `MinBytes`, `ByteLength`, `ByteLengthBetween`; rune rules
-  `MaxLength`, `MinLength`, `Length`, `LengthBetween`; `InSlice`,
-  `MatchingTo`, and `Passing`. Pointer-only rules include `Nil`,
-  `EmptyOrNil`, and `BlankOrNil`.
+- `String`/`StringP`: exact `EqualTo`, case-insensitive `EqualFold`, and
+  ordering; `Empty`, `Blank`; byte rules `MaxBytes`, `MinBytes`, `ByteLength`,
+  `ByteLengthBetween`; rune rules `MaxLength`, `MinLength`, `Length`,
+  `LengthBetween`; `InSlice`, `MatchingTo`, and `Passing`. Pointer-only rules
+  include `Nil`, `EmptyOrNil`, and `BlankOrNil`.
 - Numeric families: `EqualTo`, ordering, inclusive `Between`, `Zero`,
   `InSlice`, and `Passing`. Signed integers add `Positive` and `Negative`.
   Floats add `Positive`, `Negative`, `NaN`, `Infinite`, and `Finite`.
@@ -51,6 +51,11 @@ the matching width-specific constructor.
 All current built-in validators expose `Not()`, `Or()`, and `OrElse()`, but
 `OrElse()` is unavailable before v0.8. Most rule methods accept an optional
 final custom message template; verify the signature instead of assuming.
+
+`EqualFold`, `is.StringEqualFold`, and `is.StringPEqualFold` were added in
+v0.9.1. They use Unicode simple case folding with `strings.EqualFold`; they do
+not normalize text or perform full case folding. The pointer predicate and
+validator fail for nil pointers.
 
 ## Keep sessions and rules distinct
 

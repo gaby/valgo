@@ -6,6 +6,15 @@ by the core workflow. Do not use this reference to claim that a method exists.
 
 ## High-risk release boundaries
 
+### v0.9.1
+
+- Added `ValidatorString.EqualFold` and `ValidatorStringP.EqualFold` together
+  with `is.StringEqualFold` and `is.StringPEqualFold`. They use Unicode simple
+  case folding through `strings.EqualFold`, do not normalize text, and do not
+  apply full case folding. The pointer forms fail for nil pointers.
+- These APIs require v0.9.1 or later. Confirm that they exist in the effective
+  module source before using them in a consumer project.
+
 ### v0.9.0
 
 - Added `github.com/cohesivestack/valgo/is`, which exposes built-in rule logic
