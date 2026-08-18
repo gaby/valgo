@@ -8,6 +8,10 @@ import (
 
 func StringEqualTo[T ~string](value, expected T) bool { return ComparableEqualTo(value, expected) }
 
+func StringEqualFold[T ~string](value, expected T) bool {
+	return strings.EqualFold(string(value), string(expected))
+}
+
 func StringGreaterThan[T ~string](value, expected T) bool { return value > expected }
 
 func StringGreaterOrEqualTo[T ~string](value, expected T) bool { return value >= expected }
@@ -61,6 +65,10 @@ func StringLengthBetween[T ~string](value T, min, max int) bool {
 
 func StringPEqualTo[T ~string](value *T, expected T) bool {
 	return ComparablePEqualTo(value, expected)
+}
+
+func StringPEqualFold[T ~string](value *T, expected T) bool {
+	return value != nil && StringEqualFold(*value, expected)
 }
 
 func StringPGreaterThan[T ~string](value *T, expected T) bool {
